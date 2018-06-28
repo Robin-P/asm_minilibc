@@ -1,0 +1,25 @@
+#!/bin/bash
+## EPITECH PROJECT, 2018
+##
+## File description:
+##
+##
+
+make re >/dev/null
+gcc main.c -L. -lasm > /dev/null
+LD_LIBRARY_PATH=. && export LD_LIBRARY_PATH
+TMP_WITH="$(./a.out $1 | tr '\n' '/')"
+
+unset LD_LIBRARY_PATH
+gcc main.c > /dev/null
+TMP_WITHOUT="$(./a.out $1 | tr '\n' '/')"
+rm a.out
+
+IFS='/' read -a WITH <<< "$TMP_WITH"
+IFS='/' read -a WITHOUT <<< "$TMP_WITHOUT"
+
+printf "%s%94s\n" "## WITH LIBASM.SO ##" "## WITHOUT LIBASM.SO ##"
+
+for i in "${!WITHOUT[@]}"; do
+    printf "%-90.90s %-90.90s\n" "${WITH[i]}" "${WITHOUT[i]}"
+done
